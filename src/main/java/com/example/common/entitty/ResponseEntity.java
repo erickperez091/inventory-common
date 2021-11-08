@@ -20,4 +20,28 @@ public class ResponseEntity<T> {
         this.errorMessage = null;
         this.result = result;
     }
+
+    public Object getStatus() {
+        return status;
+    }
+
+    public void setStatus(Object status) {
+        this.status = status;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
+    public T getResult() {
+        return result;
+    }
+
+    public void setResult(T result) {
+        this.result = result;
+    }
 }
