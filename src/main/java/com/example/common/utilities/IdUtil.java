@@ -9,13 +9,13 @@ import java.util.UUID;
 @Component
 public class IdUtil {
 
-    public String generateId ( EnumUtil.UUIDType type ) {
+    public String generateId( EnumUtil.UUIDType type ) {
         switch ( type ) {
             case LONG: {
-                return UUID.randomUUID( ).toString( );
+                return UUID.randomUUID().toString();
             }
             case SHORT: {
-                return FriendlyId.createFriendlyId( );
+                return FriendlyId.createFriendlyId();
             }
             default: {
                 throw new IllegalArgumentException( "Not type was specified" );

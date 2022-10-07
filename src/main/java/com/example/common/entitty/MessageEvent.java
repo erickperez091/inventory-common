@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class MessageEvent implements Serializable {
 
-    public MessageEvent(EventType eventName, Map<String, Object> payload) {
+    public MessageEvent( EventType eventName, Map< String, Object > payload ) {
         this.eventName = eventName;
         this.payload = payload;
     }
@@ -16,21 +16,21 @@ public class MessageEvent implements Serializable {
     }
 
     private EventType eventName;
-    private Map<String, Object> payload;
+    private Map< String, Object > payload;
 
     public EventType getEventName() {
         return this.eventName;
     }
 
-    public Map<String, Object> getPayload() {
+    public Map< String, Object > getPayload() {
         return this.payload;
     }
 
-    public void setEventName(EventType eventName) {
+    public void setEventName( EventType eventName ) {
         this.eventName = eventName;
     }
 
-    public void setPayload(Map<String, Object> payload) {
+    public void setPayload( Map< String, Object > payload ) {
         this.payload = payload;
     }
 

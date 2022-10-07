@@ -2,20 +2,20 @@ package com.example.common.entitty;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class ResponseEntity<T> {
+@JsonInclude( JsonInclude.Include.NON_EMPTY )
+public class ResponseEntity< T > {
 
     private Object status;
     private String errorMessage;
     private T result;
 
-    public ResponseEntity(Object status, String errorMessage){
+    public ResponseEntity( Object status, String errorMessage ) {
         this.status = status;
         this.errorMessage = errorMessage;
         this.result = null;
     }
 
-    public ResponseEntity(Object status, T result){
+    public ResponseEntity( Object status, T result ) {
         this.status = status;
         this.errorMessage = null;
         this.result = result;
@@ -25,7 +25,7 @@ public class ResponseEntity<T> {
         return status;
     }
 
-    public void setStatus(Object status) {
+    public void setStatus( Object status ) {
         this.status = status;
     }
 
@@ -33,7 +33,7 @@ public class ResponseEntity<T> {
         return errorMessage;
     }
 
-    public void setErrorMessage(String errorMessage) {
+    public void setErrorMessage( String errorMessage ) {
         this.errorMessage = errorMessage;
     }
 
@@ -41,7 +41,7 @@ public class ResponseEntity<T> {
         return result;
     }
 
-    public void setResult(T result) {
+    public void setResult( T result ) {
         this.result = result;
     }
 }

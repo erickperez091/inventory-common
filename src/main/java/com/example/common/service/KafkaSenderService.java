@@ -15,32 +15,32 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 @Service
 public class KafkaSenderService {
 
-    private static final Logger logger = LoggerFactory.getLogger(KafkaSenderService.class);
-    private KafkaTemplate<String, Object> kafkaTemplate;
+    private static final Logger logger = LoggerFactory.getLogger( KafkaSenderService.class );
+    private KafkaTemplate< String, Object > kafkaTemplate;
 
-    @Value("${topic-name}")
+    @Value( "${topic-name}" )
     private String topic;
 
     @Autowired
-    KafkaSenderService(KafkaTemplate<String, Object> kafkaTemplate) {
+    KafkaSenderService( KafkaTemplate< String, Object > kafkaTemplate ) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void sendMessage(MessageEvent messageEvent) {
-        logger.info("Start sending message to [{}] topic, message: {}", topic, messageEvent);
-        ProducerRecord<String, Object> producerRecord = new ProducerRecord<>(topic, messageEvent);
-        ListenableFuture<SendResult<String, Object>> future = kafkaTemplate.send(producerRecord);
-        future.addCallback(new ListenableFutureCallback<>() {
+    public void sendMessage( MessageEvent messageEvent ) {
+        logger.info( "Start sending message to [{}] topic, message: {}", topic, messageEvent );
+        ProducerRecord< String, Object > producerRecord = new ProducerRecord<>( topic, messageEvent );
+        ListenableFuture< SendResult< String, Object > > future = kafkaTemplate.send( producerRecord );
+        future.addCallback( new ListenableFutureCallback<>() {
             @Override
-            public void onSuccess(SendResult<String, Object> result) {
-                logger.info("Sent message=[{}] with offset=[{}]", messageEvent, result.getRecordMetadata().offset());
+            public void onSuccess( SendResult< String, Object > result ) {
+                logger.info( "Sent message=[{}] with offset=[{}]", messageEvent, result.getRecordMetadata().offset() );
             }
 
             @Override
-            public void onFailure(Throwable ex) {
-                logger.error("Unable to send message=[{}] due to : {}", messageEvent, ex.getMessage());
+            public void onFailure( Throwable ex ) {
+                logger.error( "Unable to send message=[{}] due to : {}", messageEvent, ex.getMessage() );
             }
-        });
-        logger.info("Finish sending message to [{}] topic, message: {}", topic, messageEvent);
+        } );
+        logger.info( "Finish sending message to [{}] topic, message: {}", topic, messageEvent );
     }
 }

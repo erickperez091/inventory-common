@@ -36,12 +36,12 @@ public class ConsumerConfiguration {
 //    }
 
     @Bean
-    public ConsumerFactory<String, MessageEvent> consumerFactory ( ) {
-        Map<String, Object> props = new HashMap<>(
-                kafkaProperties.buildConsumerProperties( )
+    public ConsumerFactory< String, MessageEvent > consumerFactory() {
+        Map< String, Object > props = new HashMap<>(
+                kafkaProperties.buildConsumerProperties()
         );
 
-        JsonDeserializer<MessageEvent> deserializer = new JsonDeserializer<>( MessageEvent.class );
+        JsonDeserializer< MessageEvent > deserializer = new JsonDeserializer<>( MessageEvent.class );
         deserializer.setRemoveTypeHeaders( false );
         deserializer.addTrustedPackages( "*" );
         deserializer.setUseTypeMapperForKey( true );
@@ -51,13 +51,13 @@ public class ConsumerConfiguration {
         props.put( ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class );
         props.put( ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, deserializer );
         props.put( ConsumerConfig.GROUP_ID_CONFIG, kafkaId );
-        return new DefaultKafkaConsumerFactory<>( props, new StringDeserializer( ), deserializer );
+        return new DefaultKafkaConsumerFactory<>( props, new StringDeserializer(), deserializer );
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, MessageEvent> kafkaListenerContainerFactory ( ) {
-        ConcurrentKafkaListenerContainerFactory<String, MessageEvent> factory = new ConcurrentKafkaListenerContainerFactory<>( );
-        factory.setConsumerFactory( consumerFactory( ) );
+    public ConcurrentKafkaListenerContainerFactory< String, MessageEvent > kafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory< String, MessageEvent > factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory( consumerFactory() );
         return factory;
     }
 }

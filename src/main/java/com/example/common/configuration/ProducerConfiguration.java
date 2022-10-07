@@ -26,8 +26,8 @@ public class ProducerConfiguration {
     private String topicName;
 
     @Bean
-    public Map<String, Object> producerConfigs ( ) {
-        Map<String, Object> props = new HashMap<>( );
+    public Map< String, Object > producerConfigs() {
+        Map< String, Object > props = new HashMap<>();
         props.put( ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress );
         props.put( ProducerConfig.CLIENT_ID_CONFIG, kafkaId );
         props.put( ProducerConfig.ACKS_CONFIG, "all" );
@@ -38,13 +38,13 @@ public class ProducerConfiguration {
     }
 
     @Bean
-    public ProducerFactory<String, Object> producerFactory ( ) {
-        return new DefaultKafkaProducerFactory<>( producerConfigs( ) );
+    public ProducerFactory< String, Object > producerFactory() {
+        return new DefaultKafkaProducerFactory<>( producerConfigs() );
     }
 
     @Bean
-    public KafkaTemplate<String, Object> kafkaTemplate ( ) {
-        return new KafkaTemplate<>( producerFactory( ) );
+    public KafkaTemplate< String, Object > kafkaTemplate() {
+        return new KafkaTemplate<>( producerFactory() );
     }
 
     /*
