@@ -16,7 +16,7 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 public class KafkaSenderService {
 
     private static final Logger logger = LoggerFactory.getLogger( KafkaSenderService.class );
-    private KafkaTemplate< String, Object > kafkaTemplate;
+    private final KafkaTemplate< String, Object > kafkaTemplate;
 
     @Value( "${topic-name}" )
     private String topic;

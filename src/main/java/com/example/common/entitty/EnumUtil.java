@@ -36,6 +36,6 @@ public class EnumUtil implements Serializable {
     }
 
     public enum InvoiceStatus {
-        APPROVED, CANCELED
+        CREATED, APPROVED, CANCELED
     }
 }
