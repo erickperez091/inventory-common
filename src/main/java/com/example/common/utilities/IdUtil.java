@@ -11,13 +11,13 @@ public class IdUtil {
 
     public String generateId( EnumUtil.UUIDType type ) {
         switch ( type ) {
-            case LONG -> {
+            case LONG: {
                 return UUID.randomUUID().toString();
             }
-            case SHORT -> {
+            case SHORT: {
                 return FriendlyId.createFriendlyId();
             }
-            default -> {
+            default: {
                 throw new IllegalArgumentException( "Not type was specified" );
             }
         }
