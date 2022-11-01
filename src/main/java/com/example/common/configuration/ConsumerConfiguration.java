@@ -30,10 +30,6 @@ public class ConsumerConfiguration {
 
     @Value( value = "${kafka.max.poll.records}" )
     private int maxPollRecords;
-//    @Bean
-//    public Map<String, Object> consumerConfigs() {
-//        return props;
-//    }
 
     @Bean
     public ConsumerFactory< String, MessageEvent > consumerFactory() {
