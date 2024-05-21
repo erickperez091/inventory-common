@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
+import java.util.concurrent.CompletableFuture;
+
 @Service
 public class KafkaSenderService {
 
@@ -29,7 +31,17 @@ public class KafkaSenderService {
     public void sendMessage( MessageEvent messageEvent ) {
         logger.info( "Start sending message to [{}] topic, message: {}", topic, messageEvent );
         ProducerRecord< String, Object > producerRecord = new ProducerRecord<>( topic, messageEvent );
-        ListenableFuture< SendResult< String, Object > > future = kafkaTemplate.send( producerRecord );
+        CompletableFuture<SendResult<String, Object>> response = kafkaTemplate.send( producerRecord );
+        response.whenComplete( (result, ex) -> {
+            if ( ex != null ) {
+                logger.error( "Unable to send message=[{}] due to : {}", messageEvent, ex.getMessage() );
+            }
+            else{
+                logger.info( "Sent message=[{}] with offset=[{}]", messageEvent, result.getRecordMetadata().offset() );
+            }
+        } );
+
+        /*ListenableFuture< SendResult< String, Object > > future = kafkaTemplate.send( producerRecord );
         future.addCallback( new ListenableFutureCallback<>() {
             @Override
             public void onSuccess( SendResult< String, Object > result ) {
@@ -40,7 +52,7 @@ public class KafkaSenderService {
             public void onFailure( Throwable ex ) {
                 logger.error( "Unable to send message=[{}] due to : {}", messageEvent, ex.getMessage() );
             }
-        } );
+        } );*/
         logger.info( "Finish sending message to [{}] topic, message: {}", topic, messageEvent );
     }
 }
