@@ -1,6 +1,6 @@
-package com.example.common.entitty;
+package com.example.common.entity;
 
-import com.example.common.entitty.EnumUtil.EventType;
+import com.example.common.entity.EnumUtil.EventType;
 
 import java.io.Serializable;
 import java.util.Map;

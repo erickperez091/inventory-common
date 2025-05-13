@@ -1,8 +1,6 @@
-package com.example.common.entitty;
+package com.example.common.entity;
 
-import java.io.Serializable;
-
-public class EnumUtil implements Serializable {
+public class EnumUtil {
 
     public enum EventType {
         // Product Events

@@ -1,7 +1,7 @@
 package com.example.common.utilities;
 
 import com.devskiller.friendly_id.FriendlyId;
-import com.example.common.entitty.EnumUtil;
+import com.example.common.entity.EnumUtil;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
