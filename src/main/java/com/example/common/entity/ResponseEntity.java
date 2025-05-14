@@ -1,8 +1,12 @@
 package com.example.common.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 @JsonInclude( JsonInclude.Include.NON_EMPTY )
+@Data
+@AllArgsConstructor
 public class ResponseEntity< T > {
 
     private Object status;
@@ -18,30 +22,6 @@ public class ResponseEntity< T > {
     public ResponseEntity( Object status, T result ) {
         this.status = status;
         this.errorMessage = null;
-        this.result = result;
-    }
-
-    public Object getStatus() {
-        return status;
-    }
-
-    public void setStatus( Object status ) {
-        this.status = status;
-    }
-
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
-    public void setErrorMessage( String errorMessage ) {
-        this.errorMessage = errorMessage;
-    }
-
-    public T getResult() {
-        return result;
-    }
-
-    public void setResult( T result ) {
         this.result = result;
     }
 }

@@ -1,40 +1,20 @@
 package com.example.common.entity;
 
 import com.example.common.entity.EnumUtil.EventType;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Map;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class MessageEvent implements Serializable {
 
     private EventType eventName;
     private Map< String, Object > payload;
 
-    public MessageEvent( EventType eventName, Map< String, Object > payload ) {
-        this.eventName = eventName;
-        this.payload = payload;
-    }
-
-    public MessageEvent() {
-    }
-
-    public EventType getEventName() {
-        return this.eventName;
-    }
-
-    public Map< String, Object > getPayload() {
-        return this.payload;
-    }
-
-    public void setEventName( EventType eventName ) {
-        this.eventName = eventName;
-    }
-
-    public void setPayload( Map< String, Object > payload ) {
-        this.payload = payload;
-    }
-
-    public String toString() {
-        return "MessageEvent(eventName=" + this.getEventName() + ", payload=" + this.getPayload() + ")";
-    }
 }
+
