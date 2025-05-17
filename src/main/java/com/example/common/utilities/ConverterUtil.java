@@ -1,7 +1,9 @@
 package com.example.common.utilities;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -33,5 +35,18 @@ public class ConverterUtil {
 
     public void copyProperties( Object source, Object target, String... propsToIgnore ) {
         BeanUtils.copyProperties( source, target, propsToIgnore );
+    }
+
+    public <T, U> U transformObject(T sourceObject, TypeReference<U> targetTypeReference) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure( SerializationFeature.FAIL_ON_EMPTY_BEANS, false );
+        U targetObject = null;
+        try {
+            String jsonString = objectMapper.writeValueAsString(sourceObject);
+            targetObject = objectMapper.readValue(jsonString, targetTypeReference);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return targetObject;
     }
 }
