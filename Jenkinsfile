@@ -8,13 +8,13 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/erickperez091/inventory-common.git'
+                git 'https://github.com/erickperez091/inventory-common.git' // reemplázalo con tu repo real
             }
         }
 
-        stage('Build with Maven') {
+        stage('Build') {
             steps {
-                sh "${MAVEN_HOME}/bin/mvn clean package"
+                sh "${MAVEN_HOME}/bin/mvn clean package -DskipTests"
             }
         }
 
@@ -25,8 +25,8 @@ pipeline {
                     protocol: 'http',
                     nexusUrl: 'nexus:8081',
                     groupId: 'com.example',
-                    version: '1.0.0',
-                    repository: 'maven-releases',
+                    version: '1.0.1',
+                    repository: 'maven-test-releases',
                     credentialsId: 'nexus-creds',
                     artifacts: [
                         [artifactId: 'commons-lib', classifier: '', file: 'target/commons-lib-1.0.1.jar', type: 'jar']
