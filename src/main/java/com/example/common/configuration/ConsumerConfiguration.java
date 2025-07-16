@@ -22,7 +22,7 @@ public class ConsumerConfiguration {
     @Autowired
     private KafkaProperties kafkaProperties;
 
-    @Value( value = "${kafka.bootstrapAddress}" )
+    @Value( value = "${spring.kafka.bootstrap-servers}" )
     private String bootstrapAddress;
 
     @Value( value = "${kafka.consumer.client-id}" )
