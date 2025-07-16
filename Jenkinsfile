@@ -13,6 +13,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+                echo "Building branch: ${params.BRANCH_NAME}"
                 checkout([$class: 'GitSCM',
                           branches: [[name: "*/${params.BRANCH_NAME}"]],
                           userRemoteConfigs: [[url: 'https://github.com/erickperez091/inventory-common.git']]])
