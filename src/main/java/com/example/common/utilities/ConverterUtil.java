@@ -1,5 +1,6 @@
 package com.example.common.utilities;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,12 +39,12 @@ public class ConverterUtil {
     }
 
     public <T, U> U transformObject(T sourceObject, TypeReference<U> targetTypeReference) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure( SerializationFeature.FAIL_ON_EMPTY_BEANS, false );
+        mapper.configure( SerializationFeature.FAIL_ON_EMPTY_BEANS, false );
+        mapper.setSerializationInclusion( JsonInclude.Include.NON_EMPTY);
         U targetObject = null;
         try {
-            String jsonString = objectMapper.writeValueAsString(sourceObject);
-            targetObject = objectMapper.readValue(jsonString, targetTypeReference);
+            String jsonString = mapper.writeValueAsString(sourceObject);
+            targetObject = mapper.readValue(jsonString, targetTypeReference);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
