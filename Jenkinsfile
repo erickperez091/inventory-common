@@ -43,9 +43,9 @@ pipeline {
                 )
             }
         }
+    }
     post {
-            success { echo 'commons-lib publish successfully in Nexus' }
-            failure { echo 'Error publishing commons-lib' }
-        }
+        success { echo 'commons-lib published successfully in Nexus' }
+        failure { echo 'Error publishing commons-lib' }
     }
 }
