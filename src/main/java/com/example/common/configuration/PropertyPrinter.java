@@ -19,7 +19,8 @@ public class PropertyPrinter {
             "spring.kafka",
             "eureka",
             "kafka",
-            "server.port"
+            "server.port",
+            "security"
     );
 
     public PropertyPrinter( Environment environment ) {
