@@ -1,6 +1,7 @@
 package com.example.common.security;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,6 +13,7 @@ import java.util.logging.Logger;
 
 @Configuration
 @ConditionalOnProperty(name = "security.enabled", havingValue = "false")
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class NoSecurityConfig {
 
     private final static Logger LOGGER = Logger.getLogger(NoSecurityConfig.class.getName());

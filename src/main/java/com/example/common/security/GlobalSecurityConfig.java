@@ -2,8 +2,10 @@ package com.example.common.security;
 
 import com.example.common.utilities.JwtUtils;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @EnableMethodSecurity
 @ConditionalOnProperty(name = "security.enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class GlobalSecurityConfig {
 
     @Value("#{'${security.public.url:}'.split(',')}")
@@ -40,10 +43,9 @@ public class GlobalSecurityConfig {
     @Bean
     @ConditionalOnProperty(name = "security.enabled", havingValue = "true")
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
-                    if (publicUrls != null && !publicUrls.isEmpty()) {
+                    if (CollectionUtils.isNotEmpty(publicUrls)) {
                         publicUrls.forEach(url -> {
                             auth.requestMatchers(url).permitAll();
                         });
