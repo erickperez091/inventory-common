@@ -1,9 +1,8 @@
 package com.example.common.service;
 
 import com.example.common.entity.MessageEvent;
+import lombok.extern.log4j.Log4j2;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -15,9 +14,9 @@ import java.util.concurrent.CompletableFuture;
 
 @Service
 @ConditionalOnProperty(name = "enable.kafka", havingValue = "true")
+@Log4j2
 public class KafkaSenderService {
 
-    private static final Logger logger = LoggerFactory.getLogger( KafkaSenderService.class );
     private final KafkaTemplate< String, Object > kafkaTemplate;
 
     @Value( "${topic-name}" )

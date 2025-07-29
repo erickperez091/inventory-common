@@ -1,6 +1,7 @@
 package com.example.common.configuration;
 
 import jakarta.annotation.PostConstruct;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.MapPropertySource;
@@ -11,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
+@Log4j2
 public class PropertyPrinter {
 
     private final ConfigurableEnvironment environment;
@@ -29,18 +31,18 @@ public class PropertyPrinter {
 
     @PostConstruct
     public void init() {
-        System.out.println( "---- PROPERTIES DETECTADOS POR SPRING ----" );
+        logger.info( "---- PROPERTIES DETECTADOS POR SPRING ----" );
         for ( PropertySource< ? > source : environment.getPropertySources() ) {
             if ( source instanceof MapPropertySource mapSource ) {
                 for ( String key : mapSource.getPropertyNames() ) {
                     if ( matchesIncludedPrefix( key ) ) {
                         String value = environment.getProperty( key );
-                        System.out.printf( "%s = %s%n", key, value );
+                        logger.info("{} = {}\n", key, value);
                     }
                 }
             }
         }
-        System.out.println( "---- FIN DE LISTA ----" );
+        logger.info( "---- FIN DE LISTA ----" );
     }
 
     private boolean matchesIncludedPrefix( String key ) {

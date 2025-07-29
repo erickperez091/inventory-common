@@ -5,17 +5,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
 @Component
+@Log4j2
 public class ConverterUtil {
-
-    private static final Logger logger = LoggerFactory.getLogger( ConverterUtil.class );
 
     private static final ObjectMapper mapper = new ObjectMapper();
 

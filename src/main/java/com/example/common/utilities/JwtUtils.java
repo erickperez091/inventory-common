@@ -40,6 +40,10 @@ public class JwtUtils {
         return getAllClaimsFromToken(token).get("role", List.class);
     }*/
 
+    public Date getExpiration(String token) {
+        return getAllClaimsFromToken(token).getExpiration();
+    }
+
     public String getRole(String token) {
         return getAllClaimsFromToken(token).get("role", String.class);
     }

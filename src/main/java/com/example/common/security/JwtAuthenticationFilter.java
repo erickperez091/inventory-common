@@ -1,5 +1,6 @@
 package com.example.common.security;
 
+import com.example.common.service.RedisBlackListService;
 import com.example.common.utilities.JwtUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -21,6 +22,7 @@ import java.util.List;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtils jwtUtils;
+    private final RedisBlackListService redisBlackListService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -28,6 +30,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String token = this.getTokenFromHeader(request);
 
         if (StringUtils.isNotBlank(token) && jwtUtils.isTokenValid(token)) {
+
+            if (redisBlackListService.isTokenInBlackList(token)) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
+
             String username = jwtUtils.getUsername(token);
             String role = jwtUtils.getRole(token);
 
