@@ -37,7 +37,7 @@ public class PropertyPrinter {
                 for ( String key : mapSource.getPropertyNames() ) {
                     if ( matchesIncludedPrefix( key ) ) {
                         String value = environment.getProperty( key );
-                        logger.info("{} = {}\n", key, value);
+                        logger.info("{} = {}", key, value);
                     }
                 }
             }

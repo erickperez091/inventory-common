@@ -8,10 +8,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class JwtConfiguration {
 
-    @Value("${jwt.secret}")
+    @Value("${security.jwt.secret}")
     private String secret;
 
-    @Value("${jwt.expiration}")
+    @Value("${security.jwt.expiration}")
     private long expirationMilis;
 
     @Bean

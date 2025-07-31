@@ -1,5 +1,6 @@
 package com.example.common.security;
 
+import com.example.common.service.RedisService;
 import com.example.common.utilities.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
@@ -25,14 +26,15 @@ import java.util.List;
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class GlobalSecurityConfig {
 
-    @Value("#{'${security.public.url:}'.split(',')}")
+    @Value("#{'${security.public.url:}'.empty ? {} : '${security.public.url}'.split(',')}")
     private List<String> publicUrls;
 
     private final JwtUtils jwtUtils;
+    private final RedisService redisService;
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(jwtUtils);
+        return new JwtAuthenticationFilter(jwtUtils, redisService);
     }
 
     @Bean

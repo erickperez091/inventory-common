@@ -1,6 +1,6 @@
 package com.example.common.security;
 
-import com.example.common.service.RedisBlackListService;
+import com.example.common.service.RedisService;
 import com.example.common.utilities.JwtUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -22,31 +22,32 @@ import java.util.List;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtils jwtUtils;
-    private final RedisBlackListService redisBlackListService;
+    private final RedisService redisService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         final String token = this.getTokenFromHeader(request);
 
-        if (StringUtils.isNotBlank(token) && jwtUtils.isTokenValid(token)) {
-
-            if (redisBlackListService.isTokenInBlackList(token)) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                return;
-            }
-
+        if (StringUtils.isNotBlank(token)) {
             String username = jwtUtils.getUsername(token);
-            String role = jwtUtils.getRole(token);
 
-            List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role));
+            if (jwtUtils.isTokenValid(token)) {
 
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
+                if (redisService.isTokenInBlackList(token)) {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    return;
+                }
 
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+                String role = jwtUtils.getRole(token);
+                List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role));
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
 
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
         }
+
         filterChain.doFilter(request, response);
     }
 
