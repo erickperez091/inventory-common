@@ -19,6 +19,12 @@ pipeline {
                           userRemoteConfigs: [[url: 'https://github.com/erickperez091/inventory-common.git']]])
             }
         }
+        
+        stage('Test')    {
+            steps {
+                sh "${MAVEN_HOME}/bin/mvn clean test"
+            }
+        }
 
         stage('Build') {
             steps {
