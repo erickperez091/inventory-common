@@ -1,5 +1,6 @@
 package com.example.common.security;
 
+import com.example.common.BlackListAuthException;
 import com.example.common.service.CacheService;
 import com.example.common.utilities.JwtUtils;
 import jakarta.servlet.FilterChain;
@@ -9,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +25,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtils jwtUtils;
     private final CacheService cacheService;
+    private final CustomAuthEntryPoint customAuthEntryPoint;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -35,7 +38,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (jwtUtils.isTokenValid(token)) {
 
                 if (cacheService.isTokenInBlackList(token)) {
-                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    AuthenticationException ex = new BlackListAuthException("You have expired token, please login again");
+                    customAuthEntryPoint.commence(request, response, ex);
                     return;
                 }
 
