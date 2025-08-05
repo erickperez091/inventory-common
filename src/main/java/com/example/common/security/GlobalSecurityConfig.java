@@ -1,6 +1,6 @@
 package com.example.common.security;
 
-import com.example.common.service.RedisService;
+import com.example.common.service.CacheService;
 import com.example.common.utilities.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
@@ -30,11 +30,11 @@ public class GlobalSecurityConfig {
     private List<String> publicUrls;
 
     private final JwtUtils jwtUtils;
-    private final RedisService redisService;
+    private final CacheService cacheService;
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(jwtUtils, redisService);
+        return new JwtAuthenticationFilter(jwtUtils, cacheService);
     }
 
     @Bean
@@ -54,6 +54,10 @@ public class GlobalSecurityConfig {
                     }
                     auth.anyRequest().authenticated();
                 })
+                .exceptionHandling( exception -> exception
+                        .authenticationEntryPoint(new CustomAuthEntryPoint())
+                        .accessDeniedHandler(new CustomAccessDeniedHandler())
+                )
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
