@@ -31,10 +31,11 @@ public class GlobalSecurityConfig {
 
     private final JwtUtils jwtUtils;
     private final CacheService cacheService;
+    private final CustomAuthEntryPoint customAuthEntryPoint;
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(jwtUtils, cacheService);
+        return new JwtAuthenticationFilter(jwtUtils, cacheService, customAuthEntryPoint);
     }
 
     @Bean
