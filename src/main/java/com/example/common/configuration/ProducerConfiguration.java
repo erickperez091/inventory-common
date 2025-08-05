@@ -1,5 +1,6 @@
 package com.example.common.configuration;
 
+import lombok.Setter;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +17,7 @@ import java.util.Map;
 
 @Configuration
 @ConditionalOnProperty(name = "enable.kafka", havingValue = "true")
+@Setter
 public class ProducerConfiguration {
 
     @Value( value = "${spring.kafka.bootstrap-servers}" )

@@ -1,6 +1,8 @@
 package com.example.common.configuration;
 
 import com.example.common.entity.MessageEvent;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +21,11 @@ import java.util.Map;
 
 @Configuration
 @ConditionalOnProperty(name = "enable.kafka", havingValue = "true")
+@RequiredArgsConstructor
+@Setter
 public class ConsumerConfiguration {
 
-    @Autowired
-    private KafkaProperties kafkaProperties;
+    private final KafkaProperties kafkaProperties;
 
     @Value( value = "${spring.kafka.bootstrap-servers}" )
     private String bootstrapAddress;

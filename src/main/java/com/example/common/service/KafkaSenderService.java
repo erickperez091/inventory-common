@@ -1,6 +1,7 @@
 package com.example.common.service;
 
 import com.example.common.entity.MessageEvent;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
