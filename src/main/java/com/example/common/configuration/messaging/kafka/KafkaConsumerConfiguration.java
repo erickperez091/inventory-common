@@ -1,11 +1,9 @@
-package com.example.common.configuration;
+package com.example.common.configuration.messaging.kafka;
 
 import com.example.common.entity.MessageEvent;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
@@ -20,21 +18,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-@ConditionalOnProperty(name = "enable.kafka", havingValue = "true")
+@ConditionalOnProperty(name = "messaging.provider", havingValue = "kafka")
 @RequiredArgsConstructor
-@Setter
-public class ConsumerConfiguration {
+public class KafkaConsumerConfiguration {
 
     private final KafkaProperties kafkaProperties;
 
-    @Value( value = "${spring.kafka.bootstrap-servers}" )
-    private String bootstrapAddress;
+    @Value("${spring.kafka.bootstrap-servers}")
+    private String bootstrapServers;
 
-    @Value( value = "${kafka.consumer.client-id}" )
-    private String kafkaId;
+    @Value("${messaging.kafka.group-id:user-group}")
+    private String groupId;
 
-    @Value( value = "${kafka.max.poll.records}" )
+    @Value( value = "${messaging.kafka.max-poll-records}" )
     private int maxPollRecords;
+
 
     @Bean
     public ConsumerFactory< String, MessageEvent > consumerFactory() {
@@ -47,11 +45,11 @@ public class ConsumerConfiguration {
         deserializer.addTrustedPackages( "*" );
         deserializer.setUseTypeMapperForKey( true );
 
-        props.put( ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress );
+        props.put( ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers );
         props.put( ConsumerConfig.MAX_POLL_RECORDS_CONFIG, maxPollRecords );
         props.put( ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class );
         props.put( ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, deserializer );
-        props.put( ConsumerConfig.GROUP_ID_CONFIG, kafkaId );
+        props.put( ConsumerConfig.GROUP_ID_CONFIG, groupId );
         return new DefaultKafkaConsumerFactory<>( props, new StringDeserializer(), deserializer );
     }
 
@@ -61,4 +59,6 @@ public class ConsumerConfiguration {
         factory.setConsumerFactory( consumerFactory() );
         return factory;
     }
+
+
 }

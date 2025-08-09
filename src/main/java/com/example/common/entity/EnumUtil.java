@@ -19,6 +19,11 @@ public class EnumUtil {
         UPDATE_INVOICE,
         DELETE_INVOICE,
 
+        //User Events
+        CREATE_USER,
+        UPDATE_USER,
+        DELETE_USER,
+
         // Invoice Line Events
         ADD_MODIFY_INVOICE_LINE
 
