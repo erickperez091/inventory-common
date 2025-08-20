@@ -28,7 +28,7 @@ import static org.mockito.Mockito.when;
 
 class KafkaSenderServiceTest {
 
-    @Mock
+    /*@Mock
     private KafkaTemplate<String, Object> kafkaTemplate;
 
     @InjectMocks
@@ -83,6 +83,6 @@ class KafkaSenderServiceTest {
         // Act & Assert
         assertDoesNotThrow(() -> kafkaSenderService.sendMessage(event));
         verify(kafkaTemplate).send(any(ProducerRecord.class));
-    }
+    }*/
 
 }

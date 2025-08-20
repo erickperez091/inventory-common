@@ -34,6 +34,10 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
         </dependency>
@@ -57,6 +61,11 @@
             <groupId>com.devskiller.friendly-id</groupId>
             <artifactId>friendly-id</artifactId>
             <version>1.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.aventrix.jnanoid</groupId>
+            <artifactId>jnanoid</artifactId>
+            <version>2.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -114,6 +123,22 @@
             <scope>provided</scope>
         </dependency>
 
+
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>kinesis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>auth</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>regions</artifactId>
+        </dependency>
+
         <!-- TEST DEPENDENCIES -->
 
         <dependency>
@@ -158,6 +183,13 @@
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
                 <version>${spring.cloud.dependency.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>software.amazon.awssdk</groupId>
+                <artifactId>bom</artifactId>
+                <version>2.30.25</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
