@@ -1,5 +1,6 @@
 package com.example.common.service.messaging.impl;
 
+import com.example.common.aspect.AddCreatedBy;
 import com.example.common.entity.MessageEvent;
 import com.example.common.service.messaging.MessagingProducer;
 import jakarta.annotation.PostConstruct;
@@ -27,6 +28,7 @@ public class KafkaMessageProducer implements MessagingProducer {
     }
 
     @Override
+    @AddCreatedBy
     public void send(MessageEvent messageEvent) {
         logger.info("Start sending message to [{}] topic, message: {}", topic, messageEvent);
         ProducerRecord<String, Object> producerRecord = new ProducerRecord<>(topic, messageEvent);

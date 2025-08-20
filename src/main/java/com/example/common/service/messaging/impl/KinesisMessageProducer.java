@@ -1,5 +1,6 @@
 package com.example.common.service.messaging.impl;
 
+import com.example.common.aspect.AddCreatedBy;
 import com.example.common.entity.MessageEvent;
 import com.example.common.service.messaging.MessagingProducer;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -33,6 +34,7 @@ public class KinesisMessageProducer implements MessagingProducer {
     }
 
     @Override
+    @AddCreatedBy
     public void send(MessageEvent messageEvent) {
 
         //Sync way

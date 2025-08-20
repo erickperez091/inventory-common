@@ -44,7 +44,6 @@ public class KafkaConsumerConfiguration {
         deserializer.setRemoveTypeHeaders( false );
         deserializer.addTrustedPackages( "*" );
         deserializer.setUseTypeMapperForKey( true );
-
         props.put( ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers );
         props.put( ConsumerConfig.MAX_POLL_RECORDS_CONFIG, maxPollRecords );
         props.put( ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class );
@@ -59,6 +58,4 @@ public class KafkaConsumerConfiguration {
         factory.setConsumerFactory( consumerFactory() );
         return factory;
     }
-
-
 }
