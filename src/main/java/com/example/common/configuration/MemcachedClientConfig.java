@@ -13,10 +13,10 @@ import java.net.InetSocketAddress;
 @ConditionalOnProperty(name = "cache.provider", havingValue = "memcached")
 public class MemcachedClientConfig {
 
-    @Value("${memcached.host:localhost}")
+    @Value("${cache.memcached.host:localhost}")
     private String host;
 
-    @Value("${memcached.port:11211}")
+    @Value("${cache.memcached.port:11211}")
     private int port;
 
     @Bean
