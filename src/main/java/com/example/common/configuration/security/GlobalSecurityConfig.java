@@ -1,6 +1,7 @@
-package com.example.common.security;
+package com.example.common.configuration.security;
 
-import com.example.common.service.CacheService;
+import com.example.common.service.auth.JwtAuthenticationFilter;
+import com.example.common.service.cache.CacheService;
 import com.example.common.utilities.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;

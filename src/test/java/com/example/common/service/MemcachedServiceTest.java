@@ -1,5 +1,5 @@
 package com.example.common.service;// src/test/java/com/example/common/service/impl/MemcachedServiceTest.java
-import com.example.common.service.impl.MemcachedService;
+import com.example.common.service.cache.impl.MemcachedService;
 import com.example.common.utilities.CacheUtils;
 import net.spy.memcached.MemcachedClient;
 import org.junit.jupiter.api.BeforeEach;

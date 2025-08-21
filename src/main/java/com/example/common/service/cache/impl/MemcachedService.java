@@ -1,6 +1,6 @@
-package com.example.common.service.impl;
+package com.example.common.service.cache.impl;
 
-import com.example.common.service.CacheService;
+import com.example.common.service.cache.CacheService;
 import com.example.common.utilities.CacheUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

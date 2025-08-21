@@ -1,4 +1,4 @@
-package com.example.common.service;
+package com.example.common.service.cache;
 
 public interface CacheService {
 

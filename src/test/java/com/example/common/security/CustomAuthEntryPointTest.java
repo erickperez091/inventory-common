@@ -2,7 +2,7 @@ package com.example.common.security;
 
 import com.example.common.BlackListAuthException;
 import com.example.common.entity.dto.AuthErrorResponse;
-import com.example.common.security.CustomAuthEntryPoint;
+import com.example.common.configuration.security.CustomAuthEntryPoint;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

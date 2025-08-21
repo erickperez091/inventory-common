@@ -1,4 +1,4 @@
-package com.example.common.configuration;
+package com.example.common.configuration.security;
 
 import com.example.common.utilities.JwtUtils;
 import org.springframework.beans.factory.annotation.Value;

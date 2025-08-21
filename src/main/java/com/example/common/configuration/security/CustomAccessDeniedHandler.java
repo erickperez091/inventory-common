@@ -1,4 +1,4 @@
-package com.example.common.security;
+package com.example.common.configuration.security;
 
 import com.example.common.entity.dto.AuthErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;

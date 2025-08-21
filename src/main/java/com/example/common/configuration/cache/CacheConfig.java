@@ -1,7 +1,7 @@
-package com.example.common.configuration;
+package com.example.common.configuration.cache;
 
-import com.example.common.service.impl.MemcachedService;
-import com.example.common.service.impl.RedisService;
+import com.example.common.service.cache.impl.MemcachedService;
+import com.example.common.service.cache.impl.RedisService;
 import com.example.common.utilities.CacheUtils;
 import lombok.RequiredArgsConstructor;
 import net.spy.memcached.MemcachedClient;

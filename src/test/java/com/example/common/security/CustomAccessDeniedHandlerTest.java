@@ -1,7 +1,7 @@
 package com.example.common.security;
 
 import com.example.common.entity.dto.AuthErrorResponse;
-import com.example.common.security.CustomAccessDeniedHandler;
+import com.example.common.configuration.security.CustomAccessDeniedHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

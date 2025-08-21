@@ -1,7 +1,8 @@
-package com.example.common.security;
+package com.example.common.service.auth;
 
 import com.example.common.BlackListAuthException;
-import com.example.common.service.CacheService;
+import com.example.common.configuration.security.CustomAuthEntryPoint;
+import com.example.common.service.cache.CacheService;
 import com.example.common.utilities.JwtUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

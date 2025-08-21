@@ -1,10 +1,9 @@
 package com.example.common.security;
 
-import com.example.common.security.NoSecurityConfig;
+import com.example.common.configuration.security.NoSecurityConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.DefaultSecurityFilterChain;
-import org.springframework.security.web.SecurityFilterChain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;

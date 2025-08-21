@@ -1,4 +1,4 @@
-package com.example.common.security;
+package com.example.common.configuration.security;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;

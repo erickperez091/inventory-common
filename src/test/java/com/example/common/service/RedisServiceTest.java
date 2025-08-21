@@ -1,10 +1,9 @@
 package com.example.common.service;
 
-import com.example.common.service.impl.RedisService;
+import com.example.common.service.cache.impl.RedisService;
 import com.example.common.utilities.CacheUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 

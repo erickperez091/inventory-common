@@ -1,6 +1,7 @@
 package com.example.common.configuration;// src/test/java/com/example/common/configuration/CacheConfigTest.java
-import com.example.common.service.impl.MemcachedService;
-import com.example.common.service.impl.RedisService;
+import com.example.common.configuration.cache.CacheConfig;
+import com.example.common.service.cache.impl.MemcachedService;
+import com.example.common.service.cache.impl.RedisService;
 import com.example.common.utilities.CacheUtils;
 import net.spy.memcached.MemcachedClient;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,7 @@ class CacheConfigTest {
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
             .withBean(CacheUtils.class, () -> mock(CacheUtils.class))
             .withBean(StringRedisTemplate.class, () -> mock(StringRedisTemplate.class))
-            .withUserConfiguration(com.example.common.configuration.CacheConfig.class);
+            .withUserConfiguration(CacheConfig.class);
 
     @Test
     void memcachedServiceBeanCreatedWhenMemcachedProvider() {

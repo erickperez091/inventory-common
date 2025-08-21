@@ -1,4 +1,4 @@
-package com.example.common.configuration;
+package com.example.common.configuration.cache;
 
 import net.spy.memcached.MemcachedClient;
 import org.springframework.beans.factory.annotation.Value;
