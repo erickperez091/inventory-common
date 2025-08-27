@@ -10,6 +10,9 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.cloudwatch.CloudWatchAsyncClient;
+import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
+import software.amazon.awssdk.services.dynamodb.model.DeleteTableRequest;
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClient;
 import software.amazon.awssdk.services.kinesis.KinesisClient;
 
@@ -46,6 +49,36 @@ public class KinesisClientConfiguration {
                 .endpointOverride(URI.create(endpointOverride))
                 .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create("accessKey", "secretKey")))
                 .build();
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "messaging.kinesis.async-native", havingValue = "true")
+    public CloudWatchAsyncClient cloudWatchAsyncClient() {
+        return CloudWatchAsyncClient.builder()
+                .region(Region.US_EAST_1)
+                .endpointOverride(URI.create(endpointOverride))
+                .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create("accessKey", "secretKey")))
+                .build();
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "messaging.kinesis.async-native", havingValue = "true")
+    public DynamoDbAsyncClient dynamoDbAsyncClient() {
+        DynamoDbAsyncClient client = DynamoDbAsyncClient.builder()
+                .region(Region.US_EAST_1)
+                .endpointOverride(URI.create(endpointOverride))
+                .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create("accessKey", "secretKey")))
+                .build();
+
+        try {
+            client.deleteTable(DeleteTableRequest.builder()
+                    .tableName("user-service")
+                    .build()).join();
+        } catch (Exception ignored) {
+        }
+
+
+        return client;
     }
 
     @Bean(name = "kinesisExecutor")

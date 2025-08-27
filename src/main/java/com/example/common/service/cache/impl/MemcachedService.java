@@ -58,17 +58,17 @@ public class MemcachedService implements CacheService {
     }
 
     private void saveValueForMemcached(String key, String value, int ttl) {
-        logger.info("[MemcachedService][saveValueForMemcached][Start]: Saving data to Redis Database");
+        logger.info("[MemcachedService][saveValueForMemcached][Start]: Saving data to Memcached");
         this.memcachedClient.add(NAMESPACE + key, ttl, value);
-        logger.info("[MemcachedService][saveValueForMemcached][End]: Saving data to Redis Database");
+        logger.info("[MemcachedService][saveValueForMemcached][End]: Saving data to Memcached");
     }
 
     private String lookupValueMemcached(String valueToLookup) {
         try {
-            logger.info("[MemcachedService][lookupValueMemcached][Start]: Looking for Redis Value");
+            logger.info("[MemcachedService][lookupValueMemcached][Start]: Looking for Memcached Value");
             return Objects.isNull(this.memcachedClient.get(valueToLookup)) ? null : this.memcachedClient.get(valueToLookup).toString();
         } finally {
-            logger.info("[MemcachedService][lookupValueMemcached][End]: Looking for Redis Value");
+            logger.info("[MemcachedService][lookupValueMemcached][End]: Looking for Memcached Value");
         }
     }
 }

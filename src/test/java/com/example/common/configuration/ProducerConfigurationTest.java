@@ -1,19 +1,5 @@
 package com.example.common.configuration;
 
-import com.example.common.configuration.messaging.kafka.KafkaProducerConfiguration;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.junit.jupiter.api.BeforeEach;
-
-import java.util.Map;
-
-import org.junit.jupiter.api.Test;
-import org.apache.kafka.common.serialization.StringSerializer;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.core.ProducerFactory;
-import org.springframework.kafka.support.serializer.JsonSerializer;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 class ProducerConfigurationTest {
 
     /*private KafkaProducerConfiguration producerConfiguration;
