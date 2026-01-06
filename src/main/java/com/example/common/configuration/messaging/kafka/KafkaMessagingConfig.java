@@ -1,5 +1,6 @@
 package com.example.common.configuration.messaging.kafka;
 
+import com.example.common.entity.MessageEvent;
 import com.example.common.service.messaging.MessagingCosumer;
 import com.example.common.service.messaging.MessagingProducer;
 import com.example.common.service.messaging.impl.KafkaMessageProducer;
@@ -8,6 +9,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 
 @Configuration
@@ -28,5 +30,10 @@ public class KafkaMessagingConfig {
     @Bean
     public KafkaMessageListener kafkaMessageListener(MessagingCosumer messagingCosumer) {
         return new KafkaMessageListener(messagingCosumer);
+    }
+
+    //@Bean
+    public KafkaListenersConfig kafkaListenersConfig(ConcurrentKafkaListenerContainerFactory<String, MessageEvent> kafkaListenerContainerFactory, MessagingCosumer messagingCosumer) {
+        return new KafkaListenersConfig(kafkaListenerContainerFactory, messagingCosumer);
     }
 }

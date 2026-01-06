@@ -20,6 +20,7 @@ import software.amazon.awssdk.services.kinesis.KinesisClient;
 import software.amazon.kinesis.common.ConfigsBuilder;
 import software.amazon.kinesis.coordinator.Scheduler;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -63,6 +64,9 @@ public class KinesisMessagingConfig {
         return new KinesisMessageListener(kinesisClient, messagingCosumer, streamName);
     }
 
+    public KinesisListenersConfig kinesisListenersConfig(KinesisClient kinesisClient, MessagingCosumer messagingCosumer, List<String> streamList) {
+        return new KinesisListenersConfig(kinesisClient, messagingCosumer, streamList);
+    }
 
     // This doesn't work with localstack
     //@Bean(destroyMethod = "shutdown")

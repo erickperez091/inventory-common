@@ -42,14 +42,14 @@ public class KinesisRecordProcessor implements ShardRecordProcessor {
                 MessageEvent evt = objectMapper.readValue(json, MessageEvent.class);
                 messagingConsumer.consume(evt);
             } catch (Exception e) {
-                logger.error("Error deserializando/consumiendo record", e);
+                logger.error("Error deserializing/consuming record", e);
             }
         }
         try {
             input.checkpointer().checkpoint();
-            logger.debug("Checkpoint realizado");
+            logger.debug("Checkpoint done");
         } catch (ShutdownException | ThrottlingException | InvalidStateException e) {
-            logger.warn("No se pudo hacer checkpoint del batch", e);
+            logger.warn("Checkpoint batch couldn't be done. No se pudo hacer checkpoint del batch", e);
         }
     }
 

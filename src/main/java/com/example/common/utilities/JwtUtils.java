@@ -32,6 +32,17 @@ public class JwtUtils {
                 .compact();
     }
 
+    public String generateRefreshToken(String username) {
+        // 30 mins in ms
+        long refreshExpirationMillis = 30 * 60 * 1000;
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + refreshExpirationMillis))
+                .signWith(secretKey, SignatureAlgorithm.HS256)
+                .compact();
+    }
+
     public String getUsername(String token) {
         return getAllClaimsFromToken(token).getSubject();
     }
