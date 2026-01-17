@@ -2,7 +2,6 @@ package com.example.common.service.messaging.impl;
 
 import com.example.common.aspect.AddCreatedBy;
 import com.example.common.entity.MessageEvent;
-import com.example.common.service.messaging.MessagingProducer;
 import com.example.common.service.messaging.MessagingProducerV1;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,13 +19,14 @@ import java.util.concurrent.Executor;
 
 @RequiredArgsConstructor
 @Log4j2
-public class KinesisMessageProducer implements MessagingProducer {
+public class KinesisMessageProducerV1 implements MessagingProducerV1 {
 
     private final KinesisClient kinesisClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final Executor executor;
 
-
+    @Value("${messaging.kinesis.stream-name}")
+    private String streamName;
 
     @PostConstruct
     public void init() {
@@ -35,14 +35,14 @@ public class KinesisMessageProducer implements MessagingProducer {
 
     @Override
     @AddCreatedBy
-    public void send(String destination, MessageEvent messageEvent) {
+    public void send(MessageEvent messageEvent) {
 
         //Sync way
 
         /*try {
             byte[] jsonBytes = objectMapper.writeValueAsBytes(messageEvent);
             PutRecordRequest request = PutRecordRequest.builder()
-                    .streamName(destination)
+                    .streamName(streamName)
                     .partitionKey(messageEvent.getEventName().name())
                     .data(SdkBytes.fromByteBuffer(ByteBuffer.wrap(jsonBytes)))
                     .build();
@@ -57,7 +57,7 @@ public class KinesisMessageProducer implements MessagingProducer {
             try {
                 byte[] jsonBytes = objectMapper.writeValueAsBytes(messageEvent);
                 PutRecordRequest request = PutRecordRequest.builder()
-                        .streamName(destination)
+                        .streamName(streamName)
                         .partitionKey(messageEvent.getEventName().name())
                         .data(SdkBytes.fromByteBuffer(ByteBuffer.wrap(jsonBytes)))
                         .build();

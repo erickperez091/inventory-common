@@ -2,11 +2,12 @@ package com.example.common.service.messaging.impl;
 
 import com.example.common.aspect.AddCreatedBy;
 import com.example.common.entity.MessageEvent;
-import com.example.common.service.messaging.MessagingProducer;
+import com.example.common.service.messaging.MessagingProducerV1;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 
@@ -14,20 +15,23 @@ import java.util.concurrent.CompletableFuture;
 
 @RequiredArgsConstructor
 @Log4j2
-public class KafkaMessageProducer implements MessagingProducer {
+public class KafkaMessageProducerV1 implements MessagingProducerV1 {
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
+    @Value("${messaging.kafka.topic}")
+    private String topic;
+
     @PostConstruct
     public void init() {
-        logger.info("[KafkaMessageProducer]: Creating Class Beans KafkaMessageProducerV2");
+        logger.info("[KafkaMessageProducer]: Creating Class Beans KafkaMessageProducer");
     }
 
     @Override
     @AddCreatedBy
-    public void send(String destination, MessageEvent messageEvent) {
-        logger.info("Start sending message to [{}] topic, message: {}", destination, messageEvent);
-        ProducerRecord<String, Object> producerRecord = new ProducerRecord<>(destination, messageEvent);
+    public void send(MessageEvent messageEvent) {
+        logger.info("Start sending message to [{}] topic, message: {}", topic, messageEvent);
+        ProducerRecord<String, Object> producerRecord = new ProducerRecord<>(topic, messageEvent);
         CompletableFuture<SendResult<String, Object>> response = kafkaTemplate.send(producerRecord);
         response.whenComplete((result, ex) -> {
             if (ex != null) {

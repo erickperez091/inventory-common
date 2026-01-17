@@ -1,9 +1,14 @@
 package com.example.common.configuration.messaging.kinesis;
 
-import com.example.common.service.messaging.MessagingCosumer;
+import com.example.common.service.messaging.MessageConsumerRouter;
+import com.example.common.service.messaging.MessagingConsumer;
+import com.example.common.service.messaging.MessagingCosumerV1;
+import com.example.common.service.messaging.MessagingProducerV1;
 import com.example.common.service.messaging.MessagingProducer;
+import com.example.common.service.messaging.impl.KinesisAsyncMessageProducerV1;
 import com.example.common.service.messaging.impl.KinesisAsyncMessageProducer;
 import com.example.common.service.messaging.impl.KinesisMessageProducer;
+import com.example.common.service.messaging.impl.KinesisMessageProducerV1;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.log4j.Log4j2;
@@ -13,17 +18,11 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import software.amazon.awssdk.services.cloudwatch.CloudWatchAsyncClient;
-import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClient;
 import software.amazon.awssdk.services.kinesis.KinesisClient;
-import software.amazon.kinesis.common.ConfigsBuilder;
-import software.amazon.kinesis.coordinator.Scheduler;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 @Configuration
 @ConditionalOnProperty(name = "messaging.provider", havingValue = "kinesis")
@@ -47,12 +46,7 @@ public class KinesisMessagingConfig {
         logger.info("[KinesisMessagingConfig]: Creating Class Beans KinesisMessagingConfig");
     }
 
-    @Bean
-    @ConditionalOnProperty(name = "messaging.kinesis.async-native", havingValue = "true")
-    public MessagingProducer kinesisAsyncMessagingProducer(final KinesisAsyncClient kinesisAsyncClient) {
-        return new KinesisAsyncMessageProducer(kinesisAsyncClient);
-    }
-
+    /// This implements a way to handle N destinations in the same microservice ///
     @Bean
     @ConditionalOnProperty(name = "messaging.kinesis.async-native", havingValue = "false")
     public MessagingProducer kinesisMessagingProducer(final KinesisClient kinesisClient, @Qualifier("kinesisExecutor") Executor executor) {
@@ -60,17 +54,43 @@ public class KinesisMessagingConfig {
     }
 
     @Bean
-    public KinesisMessageListener kinesisMessageListener(final KinesisClient kinesisClient, final MessagingCosumer messagingCosumer) {
-        return new KinesisMessageListener(kinesisClient, messagingCosumer, streamName);
+    @ConditionalOnProperty(name = "messaging.kinesis.async-native", havingValue = "true")
+    public MessagingProducer kinesisAsyncMessagingProducer(final KinesisAsyncClient kinesisAsyncClient) {
+        return new KinesisAsyncMessageProducer(kinesisAsyncClient);
     }
 
-    public KinesisListenersConfig kinesisListenersConfig(KinesisClient kinesisClient, MessagingCosumer messagingCosumer, List<String> streamList) {
-        return new KinesisListenersConfig(kinesisClient, messagingCosumer, streamList);
+    @Bean
+    public KinesisMessageListener kinesisMessageListener(KinesisClient client, MessageConsumerRouter router, List<MessagingConsumer> consumers) {
+        return new KinesisMessageListener(client, router, consumers);
     }
+
+    /*
+
+     /// This implements a way to handle only 1 destination in the same microservice ///
+
+    //@Bean
+    //@ConditionalOnProperty(name = "messaging.kinesis.async-native", havingValue = "false")
+    public MessagingProducerV1 kinesisMessagingProducer(final KinesisClient kinesisClient, @Qualifier("kinesisExecutor") Executor executor) {
+        return new KinesisMessageProducerV1(kinesisClient, executor);
+    }
+
+    // @Bean
+    //@ConditionalOnProperty(name = "messaging.kinesis.async-native", havingValue = "true")
+    public MessagingProducerV1 kinesisAsyncMessagingProducer(final KinesisAsyncClient kinesisAsyncClient) {
+        return new KinesisAsyncMessageProducerV1(kinesisAsyncClient);
+    }
+
+    //@Bean
+    public KinesisMessageListenerV1 kinesisMessageListener(final KinesisClient kinesisClient, final MessagingCosumerV1 messagingCosumerV1) {
+        return new KinesisMessageListenerV1(kinesisClient, messagingCosumerV1, streamName);
+    }
+
+     */
+
 
     // This doesn't work with localstack
     //@Bean(destroyMethod = "shutdown")
-    public Scheduler kinesisScheduler(KinesisAsyncClient kinesisAsyncClient, DynamoDbAsyncClient dynamoDbAsyncClient, CloudWatchAsyncClient cloudWatchAsyncClient, MessagingCosumer messagingCosumer) {
+    /*public Scheduler kinesisScheduler(KinesisAsyncClient kinesisAsyncClient, DynamoDbAsyncClient dynamoDbAsyncClient, CloudWatchAsyncClient cloudWatchAsyncClient, MessagingCosumer messagingCosumer) {
 
         String workerId = UUID.randomUUID().toString();
 
@@ -87,7 +107,7 @@ public class KinesisMessagingConfig {
                 factory
         );
 
-        /*InitialPositionInStream positionEnum = InitialPositionInStream
+        InitialPositionInStream positionEnum = InitialPositionInStream
                 .valueOf(initialPosition.toUpperCase(Locale.ROOT));
 
         configsBuilder.retrievalConfig()
@@ -96,7 +116,7 @@ public class KinesisMessagingConfig {
                 )
                 .retrievalSpecificConfig(new PollingConfig(streamName, kinesisAsyncClient)
                         .idleTimeBetweenReadsInMillis(200) // baja latencia en local
-                );*/
+                );
 
         Scheduler scheduler = new Scheduler(
                 configsBuilder.checkpointConfig(),
@@ -117,6 +137,5 @@ public class KinesisMessagingConfig {
 
         return scheduler;
     }
-
-
+    */
 }

@@ -9,7 +9,7 @@ import org.aspectj.lang.annotation.Before;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
+import java.util.Arrays;
 
 @Component
 @Aspect
@@ -21,18 +21,21 @@ public class AddCreatedByImpl {
         try {
             logger.info("[AddCreatedByImpl][addCreatedBy] Start Adding createdBy");
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
-            Object object = joinPoint.getArgs()[0];
-            if (Objects.nonNull(object) && object instanceof MessageEvent messageEvent) {
-                if (StringUtils.isNotBlank(username) && !username.contains("anonymous")) {
-                    messageEvent.getPayload().put("createdBy", username);
-                } else {
-                    messageEvent.getPayload().put("createdBy", null);
-                }
-                joinPoint.getArgs()[0] = messageEvent;
-            }
+
+            Arrays.stream(joinPoint.getArgs())
+                    .filter(MessageEvent.class::isInstance)
+                    .map(MessageEvent.class::cast)
+                    .findFirst()
+                    .ifPresent(messageEvent -> {
+                        if (StringUtils.isNotBlank(username) && !username.contains("anonymous")) {
+                            messageEvent.getPayload().put("createdBy", username);
+                        } else {
+                            messageEvent.getPayload().put("createdBy", null);
+                        }
+                    });
+
             return joinPoint;
-        }
-        finally {
+        } finally {
             logger.info("[AddCreatedByImpl][addCreatedBy] End Adding createdBy");
         }
     }
