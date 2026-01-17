@@ -20,15 +20,20 @@ public class MessageConsumerRouter {
         this.consumers = consumers.stream()
                 .collect(Collectors.toMap(
                         MessagingConsumer::destination,
-                        Function.identity()
+                        Function.identity(),
+                        (a, b) -> {
+                            throw new IllegalStateException(
+                                    "Duplicate consumer for destination: " + a.destination()
+                            );
+                        }
                 ));
     }
 
     public void route(String destination, MessageEvent messageEvent) {
         MessagingConsumer consumer = consumers.get(destination);
 
-        if(Objects.isNull(consumer)) {
-            logger.warn("No consumer registered for topic [{}]", destination);
+        if (Objects.isNull(consumer)) {
+            logger.warn("No consumer registered for destination [{}]", destination);
             return;
         }
 
