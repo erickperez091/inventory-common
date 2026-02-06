@@ -1,7 +1,7 @@
 package com.example.common.configuration.messaging.kinesis;
 
 import com.example.common.entity.MessageEvent;
-import com.example.common.service.messaging.MessagingCosumer;
+import com.example.common.service.messaging.MessagingCosumerV1;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -23,7 +23,7 @@ import java.nio.charset.StandardCharsets;
 @RequiredArgsConstructor
 @Log4j2
 public class KinesisRecordProcessor implements ShardRecordProcessor {
-    private final MessagingCosumer messagingConsumer;
+    private final MessagingCosumerV1 messagingConsumer;
     private final ObjectMapper objectMapper;
 
     @Override

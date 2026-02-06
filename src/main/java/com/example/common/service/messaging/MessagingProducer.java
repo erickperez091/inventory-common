@@ -4,5 +4,5 @@ import com.example.common.entity.MessageEvent;
 
 public interface MessagingProducer {
 
-    void send(MessageEvent messageEvent);
+    void send(String destination, MessageEvent messageEvent);
 }

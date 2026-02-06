@@ -1,7 +1,8 @@
+
 package com.example.common.configuration.messaging.kafka;
 
 import com.example.common.entity.MessageEvent;
-import com.example.common.service.messaging.MessagingCosumer;
+import com.example.common.service.messaging.MessagingCosumerV1;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.listener.ContainerProperties;
@@ -19,7 +20,7 @@ public class KafkaListenersConfig {
     private String groupId;
 
     private final ConcurrentKafkaListenerContainerFactory<String, MessageEvent> kafkaListenerContainerFactory;
-    private final MessagingCosumer messagingCosumer;
+    private final MessagingCosumerV1 messagingCosumer;
 
     //@Bean
     public List<MessageListenerContainer> kafkaListenerContainer() {
