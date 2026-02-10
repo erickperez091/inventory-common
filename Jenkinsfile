@@ -1,57 +1,67 @@
 pipeline {
-    agent { label 'docker-agent' }
-
-    parameters {
-        string(name: 'BRANCH_NAME', defaultValue: 'develop', description: 'Nombre de la rama a construir')
-        string(name: 'VERSION', defaultValue: '1.0.1', description: 'Versión del artefacto')
+    agent {
+        docker {
+            image 'maven:3.9.9-eclipse-temurin-21'
+        }
     }
 
-    environment {
-        MAVEN_HOME = tool 'Maven 3.9.6'
+    parameters {
+        string(
+            name: 'BRANCH_NAME',
+            defaultValue: 'develop',
+            description: 'Nombre de la rama a construir'
+        )
     }
 
     stages {
+
         stage('Checkout') {
             steps {
                 echo "Building branch: ${params.BRANCH_NAME}"
-                checkout([$class: 'GitSCM',
-                          branches: [[name: "*/${params.BRANCH_NAME}"]],
-                          userRemoteConfigs: [[url: 'https://github.com/erickperez091/inventory-common.git']]])
-            }
-        }
-        
-        stage('Test')    {
-            steps {
-                sh "${MAVEN_HOME}/bin/mvn clean test"
-            }
-        }
-
-        stage('Build') {
-            steps {
-                sh "${MAVEN_HOME}/bin/mvn clean package"
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: "*/${params.BRANCH_NAME}"]],
+                    userRemoteConfigs: [[
+                        url: 'https://github.com/erickperez091/inventory-common.git'
+                    ]]
+                ])
             }
         }
 
-        stage('Upload to Nexus') {
+        stage('Build & Test') {
             steps {
-                nexusArtifactUploader(
-                    nexusVersion: 'nexus3',
-                    protocol: 'http',
-                    nexusUrl: 'nexus:8081',
-                    groupId: 'com.example',
-                    version: "${params.VERSION}",
-                    repository: 'maven-test-releases',
+                sh 'mvn clean verify'
+            }
+        }
+
+        stage('Deploy to Nexus') {
+            steps {
+                withCredentials([usernamePassword(
                     credentialsId: 'nexus-creds',
-                    artifacts: [
-                        [artifactId: 'commons-lib', classifier: '', file: "target/commons-lib-${params.VERSION}.jar", type: 'jar'],
-                        [artifactId: 'commons-lib', classifier: '', file: 'pom.xml', type: 'pom']
-                    ]
-                )
+                    usernameVariable: 'NEXUS_USER',
+                    passwordVariable: 'NEXUS_PASS'
+                )]) {
+                    configFileProvider([configFile(
+                        fileId: 'maven-settings-nexus',
+                        variable: 'MAVEN_SETTINGS'
+                    )]) {
+                        sh '''
+                          mvn deploy \
+                            -s $MAVEN_SETTINGS \
+                            -DskipTests
+                        '''
+                    }
+                }
             }
         }
     }
+
     post {
-        success { echo 'commons-lib published successfully in Nexus' }
-        failure { echo 'Error publishing commons-lib' }
+        success {
+            echo 'commons-lib published successfully in Nexus'
+        }
+        failure {
+            echo 'Error publishing commons-lib'
+        }
     }
 }
