@@ -1,12 +1,15 @@
 pipeline {
     agent {
-        label 'docker-agent'
+        docker {
+            image 'maven:3.9.9-eclipse-temurin-21'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
+        }
     }
 
     parameters {
         string(
             name: 'BRANCH',
-            defaultValue: 'feature/update-pipeline',
+            defaultValue: 'develop',
             description: 'Branch to build'
         )
     }
@@ -19,22 +22,11 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                echo "Building branch: ${params.BRANCH}"
                 checkout([
                     $class: 'GitSCM',
                     branches: [[name: "*/${params.BRANCH}"]],
                     userRemoteConfigs: [[url: env.GIT_REPO]]
                 ])
-            }
-        }
-
-        stage('Read version from POM') {
-            steps {
-                script {
-                    def pom = readMavenPom file: 'pom.xml'
-                    env.PROJECT_VERSION = pom.version
-                    echo "Version detected: ${env.PROJECT_VERSION}"
-                }
             }
         }
 
@@ -59,23 +51,10 @@ pipeline {
                             variable: 'MAVEN_SETTINGS'
                         )
                     ]) {
-                        sh '''
-                          mvn deploy \
-                            -s $MAVEN_SETTINGS \
-                            -DskipTests
-                        '''
+                        sh 'mvn deploy -s $MAVEN_SETTINGS -DskipTests'
                     }
                 }
             }
-        }
-    }
-
-    post {
-        success {
-            echo "SUCCESS: ${params.BRANCH} → ${env.PROJECT_VERSION}"
-        }
-        failure {
-            echo "FAILED: ${params.BRANCH}"
         }
     }
 }
