@@ -39,7 +39,7 @@ pipeline {
                 ]) {
                     configFileProvider([
                         configFile(
-                            fileId: 'maven-settings-nexus',
+                            fileId: 'nexus-settings',
                             variable: 'MAVEN_SETTINGS'
                         )
                     ]) {
