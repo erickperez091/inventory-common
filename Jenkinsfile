@@ -1,8 +1,7 @@
 pipeline {
     agent {
-        docker {
+        dockerContainer {
             image 'maven:3.9.9-eclipse-temurin-21'
-            args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
 
@@ -22,6 +21,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
+                echo "Building branch: ${params.BRANCH}"
                 checkout([
                     $class: 'GitSCM',
                     branches: [[name: "*/${params.BRANCH}"]],
@@ -55,6 +55,15 @@ pipeline {
                     }
                 }
             }
+        }
+    }
+
+    post {
+        success {
+            echo "SUCCESS: ${params.BRANCH}"
+        }
+        failure {
+            echo "FAILED: ${params.BRANCH}"
         }
     }
 }
