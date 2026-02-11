@@ -6,14 +6,15 @@ pipeline {
     }
 
     parameters {
-        gitParameter(
+        string(
             name: 'BRANCH',
-            type: 'PT_BRANCH',
             defaultValue: 'develop',
-            branchFilter: 'origin/(.*)',
-            sortMode: 'DESCENDING_SMART',
-            description: 'Select Git branch to build'
+            description: 'Branch to build'
         )
+    }
+
+    environment {
+        GIT_REPO = 'https://github.com/erickperez091/inventory-common.git'
     }
 
     stages {
@@ -24,10 +25,18 @@ pipeline {
                 checkout([
                     $class: 'GitSCM',
                     branches: [[name: "*/${params.BRANCH}"]],
-                    userRemoteConfigs: [[
-                        url: 'https://github.com/erickperez091/inventory-common.git'
-                    ]]
+                    userRemoteConfigs: [[url: env.GIT_REPO]]
                 ])
+            }
+        }
+
+        stage('Read version from POM') {
+            steps {
+                script {
+                    def pom = readMavenPom file: 'pom.xml'
+                    env.PROJECT_VERSION = pom.version
+                    echo "Version detected: ${env.PROJECT_VERSION}"
+                }
             }
         }
 
@@ -60,6 +69,15 @@ pipeline {
                     }
                 }
             }
+        }
+    }
+
+    post {
+        success {
+            echo "SUCCESS: ${params.BRANCH} → ${env.PROJECT_VERSION}"
+        }
+        failure {
+            echo "FAILED: ${params.BRANCH}"
         }
     }
 }
