@@ -1,8 +1,6 @@
 pipeline {
     agent {
-        docker-agent {
-            image 'maven:3.9.9-eclipse-temurin-21'
-        }
+        label 'docker-agent'
     }
 
     parameters {
