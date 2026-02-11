@@ -2,16 +2,32 @@ pipeline {
     agent {
         docker {
             image 'maven:3.9.9-eclipse-temurin-21'
-            args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
+    }
+
+    parameters {
+        gitParameter(
+            name: 'BRANCH',
+            type: 'PT_BRANCH',
+            defaultValue: 'develop',
+            branchFilter: 'origin/(.*)',
+            sortMode: 'DESCENDING_SMART',
+            description: 'Select Git branch to build'
+        )
     }
 
     stages {
 
         stage('Checkout') {
             steps {
-                echo "Building branch: ${env.BRANCH_NAME}"
-                checkout scm
+                echo "Building branch: ${params.BRANCH}"
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: "*/${params.BRANCH}"]],
+                    userRemoteConfigs: [[
+                        url: 'https://github.com/erickperez091/inventory-common.git'
+                    ]]
+                ])
             }
         }
 
@@ -22,13 +38,6 @@ pipeline {
         }
 
         stage('Deploy to Nexus') {
-            when {
-                anyOf {
-                    branch 'develop'
-                    branch 'main'
-                    branch 'release/*'
-                }
-            }
             steps {
                 withCredentials([
                     usernamePassword(
@@ -51,15 +60,6 @@ pipeline {
                     }
                 }
             }
-        }
-    }
-
-    post {
-        success {
-            echo 'commons-lib published successfully in Nexus'
-        }
-        failure {
-            echo 'Error publishing commons-lib'
         }
     }
 }
