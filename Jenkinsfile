@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        docker {
+        docker-agent {
             image 'maven:3.9.9-eclipse-temurin-21'
         }
     }
@@ -8,7 +8,7 @@ pipeline {
     parameters {
         string(
             name: 'BRANCH',
-            defaultValue: 'develop',
+            defaultValue: 'feature/update-pipeline',
             description: 'Branch to build'
         )
     }
