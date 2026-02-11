@@ -2,29 +2,16 @@ pipeline {
     agent {
         docker {
             image 'maven:3.9.9-eclipse-temurin-21'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
-    }
-
-    parameters {
-        string(
-            name: 'BRANCH_NAME',
-            defaultValue: 'develop',
-            description: 'Nombre de la rama a construir'
-        )
     }
 
     stages {
 
         stage('Checkout') {
             steps {
-                echo "Building branch: ${params.BRANCH_NAME}"
-                checkout([
-                    $class: 'GitSCM',
-                    branches: [[name: "*/${params.BRANCH_NAME}"]],
-                    userRemoteConfigs: [[
-                        url: 'https://github.com/erickperez091/inventory-common.git'
-                    ]]
-                ])
+                echo "Building branch: ${env.BRANCH_NAME}"
+                checkout scm
             }
         }
 
@@ -35,16 +22,27 @@ pipeline {
         }
 
         stage('Deploy to Nexus') {
+            when {
+                anyOf {
+                    branch 'develop'
+                    branch 'main'
+                    branch 'release/*'
+                }
+            }
             steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'nexus-creds',
-                    usernameVariable: 'NEXUS_USER',
-                    passwordVariable: 'NEXUS_PASS'
-                )]) {
-                    configFileProvider([configFile(
-                        fileId: 'maven-settings-nexus',
-                        variable: 'MAVEN_SETTINGS'
-                    )]) {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'nexus-creds',
+                        usernameVariable: 'NEXUS_USER',
+                        passwordVariable: 'NEXUS_PASS'
+                    )
+                ]) {
+                    configFileProvider([
+                        configFile(
+                            fileId: 'maven-settings-nexus',
+                            variable: 'MAVEN_SETTINGS'
+                        )
+                    ]) {
                         sh '''
                           mvn deploy \
                             -s $MAVEN_SETTINGS \
