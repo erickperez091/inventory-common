@@ -1,16 +1,8 @@
 pipeline {
-    agent {
-        dockerContainer {
-            image 'maven:3.9.9-eclipse-temurin-21'
-        }
-    }
+    agent { label 'docker-agent' }
 
     parameters {
-        string(
-            name: 'BRANCH',
-            defaultValue: 'develop',
-            description: 'Branch to build'
-        )
+        string(name: 'BRANCH', defaultValue: 'develop', description: 'Git branch')
     }
 
     environment {
@@ -21,7 +13,6 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                echo "Building branch: ${params.BRANCH}"
                 checkout([
                     $class: 'GitSCM',
                     branches: [[name: "*/${params.BRANCH}"]],
@@ -30,8 +21,9 @@ pipeline {
             }
         }
 
-        stage('Build & Test') {
+        stage('Build') {
             steps {
+                sh 'mvn -v'
                 sh 'mvn clean verify'
             }
         }
@@ -55,15 +47,6 @@ pipeline {
                     }
                 }
             }
-        }
-    }
-
-    post {
-        success {
-            echo "SUCCESS: ${params.BRANCH}"
-        }
-        failure {
-            echo "FAILED: ${params.BRANCH}"
         }
     }
 }
