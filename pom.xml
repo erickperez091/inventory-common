@@ -184,6 +184,13 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+    <distributionManagement>
+        <repository>
+            <id>nexus</id>
+            <name>maven-test-releases</name>
+            <url>http://nexus:8081/repository/maven-test-releases/</url>
+        </repository>
+    </distributionManagement>
     <build>
         <plugins>
             <plugin>
