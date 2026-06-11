@@ -1,15 +1,14 @@
 package com.example.common.service.cache.impl;
 
+import com.example.common.entity.EnumUtil;
 import com.example.common.service.cache.CacheService;
 import com.example.common.utilities.CacheUtils;
+import com.example.common.utilities.IdGeneratorService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.util.concurrent.TimeUnit;
-
-import static com.example.common.utilities.CacheUtils.BLACKLIST_NAMESPACE;
-import static com.example.common.utilities.CacheUtils.NAMESPACE;
 
 @RequiredArgsConstructor
 @Log4j2
@@ -17,6 +16,8 @@ public class RedisService implements CacheService {
 
     private final StringRedisTemplate stringRedisTemplate;
     private final CacheUtils cacheUtils;
+    private final IdGeneratorService idGeneratorService;
+
 
     @Override
     public void addTokenToBlackList(String token) {
@@ -54,6 +55,18 @@ public class RedisService implements CacheService {
         if (ttl > 0) {
             this.saveValueForRedis("active:" + username, token, ttl);
         }
+    }
+
+    @Override
+    public String updateLoginAttempt(String username) {
+        String loginAttemptId = this.idGeneratorService.generateId(EnumUtil.UUIDType.LONG);
+        this.saveValueForRedis(HEADER_UPDATE_LOGGING_ATTEMPTS + loginAttemptId, username, LOGIN_ATTEMPT_TTL);
+        return loginAttemptId;
+    }
+
+    @Override
+    public String isLoginAttemptExpired(String idLoginAttempt) {
+        return this.lookupValueRedis(NAMESPACE + HEADER_UPDATE_LOGGING_ATTEMPTS + idLoginAttempt);
     }
 
     private void saveValueForRedis(String key, String value, long ttl) {

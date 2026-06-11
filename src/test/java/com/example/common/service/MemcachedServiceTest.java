@@ -1,6 +1,7 @@
 package com.example.common.service;// src/test/java/com/example/common/service/impl/MemcachedServiceTest.java
 import com.example.common.service.cache.impl.MemcachedService;
 import com.example.common.utilities.CacheUtils;
+import com.example.common.utilities.IdGeneratorService;
 import net.spy.memcached.MemcachedClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,12 +25,13 @@ class MemcachedServiceTest {
     private MemcachedClient memcachedClient;
     private CacheUtils cacheUtils;
     private MemcachedService memcachedService;
+    private IdGeneratorService idGeneratorService;
 
     @BeforeEach
     void setUp() {
         memcachedClient = mock(MemcachedClient.class);
         cacheUtils = mock(CacheUtils.class);
-        memcachedService = new MemcachedService(memcachedClient, cacheUtils);
+        memcachedService = new MemcachedService(memcachedClient, cacheUtils, idGeneratorService);
     }
 
     @Test

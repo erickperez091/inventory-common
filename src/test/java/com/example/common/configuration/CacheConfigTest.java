@@ -3,6 +3,7 @@ import com.example.common.configuration.cache.CacheConfig;
 import com.example.common.service.cache.impl.MemcachedService;
 import com.example.common.service.cache.impl.RedisService;
 import com.example.common.utilities.CacheUtils;
+import com.example.common.utilities.IdGeneratorService;
 import net.spy.memcached.MemcachedClient;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
@@ -16,6 +17,7 @@ class CacheConfigTest {
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
             .withBean(CacheUtils.class, () -> mock(CacheUtils.class))
             .withBean(StringRedisTemplate.class, () -> mock(StringRedisTemplate.class))
+            .withBean(IdGeneratorService.class, () -> mock(IdGeneratorService.class))
             .withUserConfiguration(CacheConfig.class);
 
     @Test

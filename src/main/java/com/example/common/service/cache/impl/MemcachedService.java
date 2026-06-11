@@ -1,15 +1,14 @@
 package com.example.common.service.cache.impl;
 
+import com.example.common.entity.EnumUtil;
 import com.example.common.service.cache.CacheService;
 import com.example.common.utilities.CacheUtils;
+import com.example.common.utilities.IdGeneratorService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import net.spy.memcached.MemcachedClient;
 
 import java.util.Objects;
-
-import static com.example.common.utilities.CacheUtils.BLACKLIST_NAMESPACE;
-import static com.example.common.utilities.CacheUtils.NAMESPACE;
 
 
 @RequiredArgsConstructor
@@ -18,6 +17,7 @@ public class MemcachedService implements CacheService {
 
     public final MemcachedClient memcachedClient;
     private final CacheUtils cacheUtils;
+    private final IdGeneratorService idGeneratorService;
 
     @Override
     public void addTokenToBlackList(String token) {
@@ -55,6 +55,18 @@ public class MemcachedService implements CacheService {
         if (ttl > 0) {
             this.saveValueForMemcached("active:" + username, token, ttl);
         }
+    }
+
+    @Override
+    public String updateLoginAttempt(String username) {
+        String loginAttemptId = this.idGeneratorService.generateId(EnumUtil.UUIDType.LONG);
+        this.saveValueForMemcached(HEADER_UPDATE_LOGGING_ATTEMPTS + loginAttemptId, username, 60);
+        return loginAttemptId;
+    }
+
+    @Override
+    public String isLoginAttemptExpired(String idLoginAttempt) {
+        return this.lookupValueMemcached(NAMESPACE + HEADER_UPDATE_LOGGING_ATTEMPTS + idLoginAttempt);
     }
 
     private void saveValueForMemcached(String key, String value, int ttl) {

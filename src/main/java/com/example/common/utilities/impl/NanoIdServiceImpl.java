@@ -18,7 +18,7 @@ public class NanoIdServiceImpl implements IdGeneratorService {
     @Override
     public String generateId(EnumUtil.UUIDType type) {
         return switch (type) {
-            case SHORT -> NanoIdUtils.randomNanoId(new SecureRandom(), CUSTOM_ALPHABET, 21);
+            case SHORT -> NanoIdUtils.randomNanoId(new SecureRandom(), CUSTOM_ALPHABET, 26).toLowerCase();
             case LONG -> UUID.randomUUID().toString();
         };
     }

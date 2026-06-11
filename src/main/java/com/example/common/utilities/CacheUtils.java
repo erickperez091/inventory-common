@@ -9,9 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class CacheUtils {
 
-    public final static String NAMESPACE = "authorization:";
-    public final static String BLACKLIST_NAMESPACE = "blacklist:";
-
     private final JwtUtils jwtUtils;
 
     public int getTtl(String token) {

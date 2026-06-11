@@ -3,6 +3,7 @@ package com.example.common.configuration.cache;
 import com.example.common.service.cache.impl.MemcachedService;
 import com.example.common.service.cache.impl.RedisService;
 import com.example.common.utilities.CacheUtils;
+import com.example.common.utilities.IdGeneratorService;
 import lombok.RequiredArgsConstructor;
 import net.spy.memcached.MemcachedClient;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -17,16 +18,17 @@ public class CacheConfig {
 
     private final CacheUtils cacheUtils;
     private final StringRedisTemplate stringRedisTemplate;
+    private final IdGeneratorService idGeneratorService;
 
     @Bean
     @ConditionalOnProperty(name = "cache.provider", havingValue = "memcached")
     public MemcachedService memcachedService(MemcachedClient memcachedClient) {
-        return new MemcachedService(memcachedClient, cacheUtils);
+        return new MemcachedService(memcachedClient, cacheUtils, idGeneratorService);
     }
 
     @Bean
     @ConditionalOnProperty(name = "cache.provider", havingValue = "redis")
     public RedisService redisService() {
-        return new RedisService(stringRedisTemplate, cacheUtils);
+        return new RedisService(stringRedisTemplate, cacheUtils, idGeneratorService);
     }
 }

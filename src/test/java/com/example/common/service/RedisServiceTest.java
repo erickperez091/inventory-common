@@ -2,6 +2,7 @@ package com.example.common.service;
 
 import com.example.common.service.cache.impl.RedisService;
 import com.example.common.utilities.CacheUtils;
+import com.example.common.utilities.IdGeneratorService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -24,15 +25,17 @@ class RedisServiceTest {
 
     private CacheUtils cacheUtils;
     private RedisService redisService;
+    private IdGeneratorService idGeneratorService;
     private ValueOperations<String, String> valueOps;
 
     @BeforeEach
     void setUp() {
         StringRedisTemplate redisTemplate = mock(StringRedisTemplate.class);
         cacheUtils = mock(CacheUtils.class);
+        idGeneratorService = mock(IdGeneratorService.class);
         valueOps = mock(ValueOperations.class);
         when(redisTemplate.opsForValue()).thenReturn(valueOps);
-        redisService = new RedisService(redisTemplate, cacheUtils);
+        redisService = new RedisService(redisTemplate, cacheUtils, idGeneratorService);
     }
 
     @Test

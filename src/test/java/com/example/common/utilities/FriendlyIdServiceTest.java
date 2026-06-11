@@ -12,21 +12,21 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class FriendlyIdServiceTest {
+class FriendlyIdServiceTest {
 
     @Test
     void generateId_returnsUuidForLongType() {
-        FriendlyIdServiceImpl friendlyIdService = new FriendlyIdServiceImpl();
-        String id = friendlyIdService.generateId(EnumUtil.UUIDType.LONG);
+        IdGeneratorService idGeneratorService = new FriendlyIdServiceImpl();
+        String id = idGeneratorService.generateId(EnumUtil.UUIDType.LONG);
         assertDoesNotThrow(() -> UUID.fromString(id));
     }
 
     @Test
     void generateId_returnsFriendlyIdForShortType() {
-        FriendlyIdServiceImpl friendlyIdService = new FriendlyIdServiceImpl();
+        IdGeneratorService idGeneratorService = new FriendlyIdServiceImpl();
         try (MockedStatic<FriendlyId> friendlyIdMock = Mockito.mockStatic(FriendlyId.class)) {
             friendlyIdMock.when(FriendlyId::createFriendlyId).thenReturn("friendly-id");
-            String id = friendlyIdService.generateId(EnumUtil.UUIDType.SHORT);
+            String id = idGeneratorService.generateId(EnumUtil.UUIDType.SHORT);
             assertEquals("friendly-id", id);
         }
     }

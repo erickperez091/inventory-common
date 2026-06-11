@@ -1,6 +1,6 @@
 package com.example.common.configuration.security;
 
-import com.example.common.BlackListAuthException;
+import com.example.common.exceptions.BlackListAuthException;
 import com.example.common.entity.dto.AuthErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;

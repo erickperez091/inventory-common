@@ -1,7 +1,7 @@
 package com.example.common.security;
 
 
-import com.example.common.BlackListAuthException;
+import com.example.common.exceptions.BlackListAuthException;
 import com.example.common.configuration.security.CustomAuthEntryPoint;
 import com.example.common.service.auth.JwtAuthenticationFilter;
 import com.example.common.service.cache.CacheService;
