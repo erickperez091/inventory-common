@@ -9,6 +9,9 @@ import org.aspectj.lang.annotation.Before;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Arrays;
 
 @Component
@@ -33,7 +36,12 @@ public class AddCreatedByImpl {
                             messageEvent.getPayload().put("createdBy", null);
                         }
                         if (addCreatedAt) {
-                            messageEvent.getPayload().put("createdAt", System.currentTimeMillis());
+                            // TODO: Change this to UTC is it goes deployed to PROD
+                            LocalDateTime currentLocalDateTime = Instant
+                                    .ofEpochMilli(System.currentTimeMillis())
+                                    .atZone((ZoneId.of("America/Costa_Rica")))
+                                    .toLocalDateTime();
+                            messageEvent.getPayload().put("createdAt", currentLocalDateTime);
                         }
                     });
 
