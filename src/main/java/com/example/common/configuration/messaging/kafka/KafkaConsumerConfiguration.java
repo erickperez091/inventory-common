@@ -1,10 +1,14 @@
 package com.example.common.configuration.messaging.kafka;
 
+import com.example.common.configuration.messaging.MessagingConfiguration;
 import com.example.common.entity.MessageEvent;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
@@ -18,8 +22,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-@ConditionalOnProperty(name = "messaging.provider", havingValue = "kafka")
+@ConditionalOnBean(MessagingConfiguration.KafkaConfiguration.class)
+//@ConditionalOnProperty(name = "messaging.provider", havingValue = "kafka")
 @RequiredArgsConstructor
+@Log4j2
 public class KafkaConsumerConfiguration {
 
     private final KafkaProperties kafkaProperties;
@@ -33,6 +39,10 @@ public class KafkaConsumerConfiguration {
     @Value( value = "${messaging.kafka.max-poll-records}" )
     private int maxPollRecords;
 
+    @PostConstruct
+    public void init() {
+        logger.info("[KafkaConsumerConfiguration]: Creating Class Beans KafkaConsumerConfiguration");
+    }
 
     @Bean
     public ConsumerFactory< String, MessageEvent > consumerFactory() {

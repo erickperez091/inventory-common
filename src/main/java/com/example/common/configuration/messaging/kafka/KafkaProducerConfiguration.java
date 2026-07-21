@@ -1,10 +1,12 @@
 package com.example.common.configuration.messaging.kafka;
 
+import com.example.common.configuration.messaging.MessagingConfiguration;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.log4j.Log4j2;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +17,8 @@ import org.springframework.kafka.core.ProducerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-@ConditionalOnProperty(name = "messaging.provider", havingValue = "kafka")
+@ConditionalOnBean(MessagingConfiguration.KafkaConfiguration.class)
+//@ConditionalOnProperty(name = "messaging.provider", havingValue = "kafka")
 @Configuration
 @Log4j2
 public class KafkaProducerConfiguration {

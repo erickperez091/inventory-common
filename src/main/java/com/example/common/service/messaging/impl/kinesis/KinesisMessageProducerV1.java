@@ -1,4 +1,4 @@
-package com.example.common.service.messaging.impl;
+package com.example.common.service.messaging.impl.kinesis;
 
 import com.example.common.aspect.AddCreatedBy;
 import com.example.common.entity.MessageEvent;
@@ -34,7 +34,6 @@ public class KinesisMessageProducerV1 implements MessagingProducerV1 {
     }
 
     @Override
-    @AddCreatedBy
     public void send(MessageEvent messageEvent) {
 
         //Sync way

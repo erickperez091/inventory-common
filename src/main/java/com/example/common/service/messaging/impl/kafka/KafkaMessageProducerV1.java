@@ -1,4 +1,4 @@
-package com.example.common.service.messaging.impl;
+package com.example.common.service.messaging.impl.kafka;
 
 import com.example.common.aspect.AddCreatedBy;
 import com.example.common.entity.MessageEvent;

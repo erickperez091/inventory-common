@@ -1,15 +1,13 @@
-package com.example.common.service.messaging.impl;
+package com.example.common.service.messaging.impl.kinesis;
 
 import com.example.common.aspect.AddCreatedBy;
 import com.example.common.entity.MessageEvent;
 import com.example.common.service.messaging.MessagingProducer;
-import com.example.common.service.messaging.MessagingProducerV1;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Value;
 import software.amazon.awssdk.core.SdkBytes;
 import software.amazon.awssdk.services.kinesis.KinesisClient;
 import software.amazon.awssdk.services.kinesis.model.PutRecordRequest;
@@ -34,7 +32,6 @@ public class KinesisMessageProducer implements MessagingProducer {
     }
 
     @Override
-    @AddCreatedBy
     public void send(String destination, MessageEvent messageEvent) {
 
         //Sync way

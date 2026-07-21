@@ -1,16 +1,15 @@
 package com.example.common.configuration.messaging.kafka;
 
+import com.example.common.configuration.messaging.MessagingConfiguration;
 import com.example.common.entity.MessageEvent;
 import com.example.common.service.messaging.MessageConsumerRouter;
 import com.example.common.service.messaging.MessagingConsumer;
 import com.example.common.service.messaging.MessagingCosumerV1;
-import com.example.common.service.messaging.MessagingProducerV1;
 import com.example.common.service.messaging.MessagingProducer;
-import com.example.common.service.messaging.impl.KafkaMessageProducerV1;
-import com.example.common.service.messaging.impl.KafkaMessageProducer;
+import com.example.common.service.messaging.impl.kafka.KafkaMessageProducer;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
@@ -19,7 +18,9 @@ import org.springframework.kafka.core.KafkaTemplate;
 import java.util.List;
 
 @Configuration
-@ConditionalOnProperty(name = "messaging.provider", havingValue = "kafka")
+// TODO: Check if this works instead of @ConditionalOnProperty
+@ConditionalOnBean(MessagingConfiguration.KafkaConfiguration.class)
+//@ConditionalOnProperty(name = "messaging.provider", havingValue = "kafka")
 @Log4j2
 public class KafkaMessagingConfig {
 

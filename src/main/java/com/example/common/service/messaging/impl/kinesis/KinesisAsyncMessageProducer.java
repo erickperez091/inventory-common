@@ -1,14 +1,13 @@
-package com.example.common.service.messaging.impl;
+package com.example.common.service.messaging.impl.kinesis;
 
 import com.example.common.aspect.AddCreatedBy;
 import com.example.common.entity.MessageEvent;
-import com.example.common.service.messaging.MessagingProducerV1;
+import com.example.common.service.messaging.MessagingProducer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Value;
 import software.amazon.awssdk.core.SdkBytes;
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClient;
 import software.amazon.awssdk.services.kinesis.model.PutRecordRequest;
@@ -17,13 +16,10 @@ import java.nio.ByteBuffer;
 
 @RequiredArgsConstructor
 @Log4j2
-public class KinesisAsyncMessageProducerV1 implements MessagingProducerV1 {
+public class KinesisAsyncMessageProducer implements MessagingProducer {
 
     private final KinesisAsyncClient kinesisAsyncClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
-
-    @Value("${messaging.kinesis.stream-name}")
-    private String streamName;
 
     @PostConstruct
     public void init() {
@@ -31,13 +27,12 @@ public class KinesisAsyncMessageProducerV1 implements MessagingProducerV1 {
     }
 
     @Override
-    @AddCreatedBy
-    public void send(MessageEvent messageEvent) {
+    public void send(String destination, MessageEvent messageEvent) {
         try {
             byte[] jsonBytes = objectMapper.writeValueAsBytes(messageEvent);
 
             PutRecordRequest request = PutRecordRequest.builder()
-                    .streamName(streamName)
+                    .streamName(destination)
                     .partitionKey(messageEvent.getEventName().name())
                     .data(SdkBytes.fromByteBuffer(ByteBuffer.wrap(jsonBytes)))
                     .build();

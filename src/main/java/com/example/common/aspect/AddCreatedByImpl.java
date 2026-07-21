@@ -16,12 +16,12 @@ import java.util.Arrays;
 @Log4j2
 public class AddCreatedByImpl {
 
-    @Before("@annotation(AddCreatedBy)")
-    public Object addCreatedBy(JoinPoint joinPoint) {
+    @Before("@annotation(addCreatedBy)")
+    public Object addCreatedBy(JoinPoint joinPoint, AddCreatedBy addCreatedBy) {
         try {
             logger.info("[AddCreatedByImpl][addCreatedBy] Start Adding createdBy");
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
+            boolean addCreatedAt = addCreatedBy.addCreatedAt();
             Arrays.stream(joinPoint.getArgs())
                     .filter(MessageEvent.class::isInstance)
                     .map(MessageEvent.class::cast)
@@ -31,6 +31,9 @@ public class AddCreatedByImpl {
                             messageEvent.getPayload().put("createdBy", username);
                         } else {
                             messageEvent.getPayload().put("createdBy", null);
+                        }
+                        if (addCreatedAt) {
+                            messageEvent.getPayload().put("createdAt", System.currentTimeMillis());
                         }
                     });
 

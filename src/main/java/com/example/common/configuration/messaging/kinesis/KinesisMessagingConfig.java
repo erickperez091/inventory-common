@@ -2,13 +2,9 @@ package com.example.common.configuration.messaging.kinesis;
 
 import com.example.common.service.messaging.MessageConsumerRouter;
 import com.example.common.service.messaging.MessagingConsumer;
-import com.example.common.service.messaging.MessagingCosumerV1;
-import com.example.common.service.messaging.MessagingProducerV1;
 import com.example.common.service.messaging.MessagingProducer;
-import com.example.common.service.messaging.impl.KinesisAsyncMessageProducerV1;
-import com.example.common.service.messaging.impl.KinesisAsyncMessageProducer;
-import com.example.common.service.messaging.impl.KinesisMessageProducer;
-import com.example.common.service.messaging.impl.KinesisMessageProducerV1;
+import com.example.common.service.messaging.impl.kinesis.KinesisAsyncMessageProducer;
+import com.example.common.service.messaging.impl.kinesis.KinesisMessageProducer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.log4j.Log4j2;
